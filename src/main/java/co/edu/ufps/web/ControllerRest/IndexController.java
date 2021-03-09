@@ -22,7 +22,7 @@ public class IndexController {
 
     public String converter(){
 //    public String converter(String inputImagePath, String outputImagePath, String formatName) {
-        serviceConverter.run();
+        //serviceConverter.init(image, formatoSalida);
 
 //        FileInputStream inputStream = new FileInputStream(inputImagePath);
 //        FileOutputStream outputStream = new FileOutputStream(outputImagePath);

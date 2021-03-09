@@ -1,32 +1,38 @@
-import co.edu.ufps.commons.ConverterException;
+package co.edu.ufps.web.service;
+
+import co.edu.ufps.commons.Exception.ConverterException;
+import co.edu.ufps.commons.Exception.ValidationException;
 import co.edu.ufps.commons.ImageFormat;
+import co.edu.ufps.core.ImageConverter;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
-public interface IConverter {
-	
-	
-    default File start(File image, ImageFormat formatEnd, String destination) throws ConverterException {
-        switch (formatEnd) {
-            case PNG: return run(image, "png", destination);
-            case GIF: return run(image, "gif", destination);
-            case JPG: return run(image, "jpg", destination);
-            case BMP: return run(image, "bmp", destination);
-            default: throw new ConverterException("Error al convertir imagen: formato no valido");
-        }
-    }
+public class ServiceConverter {
 
-    default File run(File image, String formatName, String destination) throws ConverterException {
-        File imageEnd = new File(destination + "." + formatName);
+    private ImageConverter converter = new ImageConverter();
+
+    public File init(File image, String format) {
+        converter.source(image);
+
+        ImageFormat f1 = null;
         try {
-            BufferedImage bufferedImage = ImageIO.read(image);
-            ImageIO.write(bufferedImage, formatName, imageEnd);
-            return imageEnd;
-        } catch (IOException e) {
-            throw new ConverterException("Error al convertir imagen: " + e.getMessage());
+            f1 = converter.metaDataMimeType(format);
+        } catch (ValidationException e) {
+            e.printStackTrace();
         }
+
+        converter.defineFormat(f1);
+
+        File imageOut = null;
+        try {
+            imageOut = converter.startProcess();
+        } catch (ConverterException e) {
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+
+        return imageOut;
     }
+
 }

@@ -4,9 +4,11 @@ import co.edu.ufps.commons.Exception.ConverterException;
 import co.edu.ufps.commons.Exception.ValidationException;
 import co.edu.ufps.commons.ImageFormat;
 import co.edu.ufps.core.ImageConverter;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 
+@Service
 public class ServiceConverter {
 
     private ImageConverter converter = new ImageConverter();
@@ -20,9 +22,8 @@ public class ServiceConverter {
         } catch (ValidationException e) {
             e.printStackTrace();
         }
-
+        converter.setFolder("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\");
         converter.defineFormat(f1);
-
         File imageOut = null;
         try {
             imageOut = converter.startProcess();

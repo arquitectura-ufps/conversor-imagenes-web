@@ -112,7 +112,7 @@ public class IndexController {
             log.error("Content-Type", ex);
         }
         //return ResponseEntity.ok().headers(headers).body(resource);
-        return ResponseEntity.ok("{\"data\":  { \"url\":\"" + resource.getFilename() + "\"}}");
+        return ResponseEntity.ok("{ \"url\":\"" + resource.getFilename() + "\"}");
     }
 
 }

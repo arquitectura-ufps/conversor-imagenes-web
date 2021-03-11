@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ public class IndexController {
     @Autowired
     private ServiceConverter serviceConverter;
 
+    @CrossOrigin("*")
     @GetMapping("/image/{fileName:.+}")
     public ResponseEntity<Resource> image(@PathVariable String fileName, HttpServletRequest request) {
 
@@ -60,8 +62,10 @@ public class IndexController {
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
+    @CrossOrigin("*")
     @PostMapping("/converter")
-    public ResponseEntity<Resource> converter(@RequestParam("image")MultipartFile image, @RequestParam("ext")String ext){
+    public ResponseEntity<String> converter(@RequestParam("image")MultipartFile image, @RequestParam("ext")String ext){
+
         byte[]bytesImg = null;
         try {
             bytesImg = image.getBytes();
@@ -107,9 +111,8 @@ public class IndexController {
         } catch (IOException ex) {
             log.error("Content-Type", ex);
         }
-        return ResponseEntity.ok().headers(headers).body(resource);
+        //return ResponseEntity.ok().headers(headers).body(resource);
+        return ResponseEntity.ok("{\"data\":  { \"url\":\"" + resource.getFilename() + "\"}}");
     }
-
-
 
 }

@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class IndexController {
 
@@ -27,6 +29,36 @@ public class IndexController {
 
     @Autowired
     private ServiceConverter serviceConverter;
+
+    @GetMapping("/image/{fileName:.+}")
+    public ResponseEntity<Resource> image(@PathVariable String fileName, HttpServletRequest request) {
+
+        //System.out.println("file name: " + fileName);
+        String ruta = new File (".").getAbsolutePath ();
+        ruta = ruta.substring(0, ruta.length()-1);
+        // Load file as Resource
+        Resource resource = null;
+        try {
+            Path filePath = Paths.get( ruta + fileName);
+            //System.out.println("ruta: " + filePath.toUri());
+            resource = new UrlResource(filePath.toUri());
+            //resource = new UrlResource(filePath.toUri());
+            if(!resource.exists()) {
+                log.error("error: no se encontro el archivo");
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.add("Content-disposition", String.format("attachment;filename=%s", resource.getFilename()));
+            headers.setContentLength(resource.contentLength());
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        } catch (IOException ex) {
+            log.error("Content-Type", ex);
+        }
+        return ResponseEntity.ok().headers(headers).body(resource);
+    }
 
     @PostMapping("/converter")
     public ResponseEntity<Resource> converter(@RequestParam("image")MultipartFile image, @RequestParam("ext")String ext){
@@ -36,7 +68,7 @@ public class IndexController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println (new File (".").getAbsolutePath ());
+        //System.out.println (new File (".").getAbsolutePath ());
         String ruta = new File (".").getAbsolutePath ();
         ruta = ruta.substring(0, ruta.length()-1);
         try {

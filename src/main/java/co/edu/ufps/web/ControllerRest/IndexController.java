@@ -36,19 +36,24 @@ public class IndexController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println (new File (".").getAbsolutePath ());
+        String ruta = new File (".").getAbsolutePath ();
+        ruta = ruta.substring(0, ruta.length()-1);
         try {
-            File destination = new File("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\");
+            //File destination = new File("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\");
+
+            File destination = new File(ruta + "\\");
             if (destination.isDirectory()) {
                 destination.mkdir();
             }
-            Path rutaCompleta = Paths.get("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\" + image.getOriginalFilename());
+            //Path rutaCompleta = Paths.get("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\" + image.getOriginalFilename());
+            Path rutaCompleta = Paths.get(ruta + "\\" + image.getOriginalFilename());
             Files.write(rutaCompleta, bytesImg);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        File imageOut = serviceConverter.init(new File("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\" + image.getOriginalFilename()), ext);
+        File imageOut = serviceConverter.init(new File(ruta + "\\" + image.getOriginalFilename()), ext, ruta);
 
         Path filePath = Paths.get(imageOut.getAbsolutePath());
 

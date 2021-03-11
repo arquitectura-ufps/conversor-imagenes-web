@@ -13,7 +13,7 @@ public class ServiceConverter {
 
     private ImageConverter converter = new ImageConverter();
 
-    public File init(File image, String format) {
+    public File init(File image, String format, String folder) {
         converter.source(image);
 
         ImageFormat f1 = null;
@@ -22,7 +22,8 @@ public class ServiceConverter {
         } catch (ValidationException e) {
             e.printStackTrace();
         }
-        converter.setFolder("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\");
+        //converter.setFolder("C:\\Users\\manue\\Desktop\\arquitectura-ufps\\temp\\");
+        converter.setFolder(folder);
         converter.defineFormat(f1);
         File imageOut = null;
         try {
